@@ -43,7 +43,7 @@ namespace FormsGyumolcs {
         private async void newVegButton_Click(object sender, EventArgs e) {
             string nev = nevBox.Text;
 
-            if (nev.Length == 0) {
+            if (nev.Trim().Length == 0) {
                 MessageBox.Show("Adjon meg egy gyümölcs nevet", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 nevBox.Focus();
                 return;
@@ -57,32 +57,66 @@ namespace FormsGyumolcs {
 
             await command.ExecuteNonQueryAsync();
 
-            nevBox.Text = "";
-            egysegAr.Value = egysegAr.Minimum;
-            amountBox.Value = amountBox.Minimum;
+            ResetProperties();
             RefreshListItems();
 
             MessageBox.Show("Adatok rögzítve", "Adatok", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async void removeVeg_Click(object sender, EventArgs e) {
-            object selectedVeg = gyumolcsList.SelectedItem;
-
-            if (selectedVeg is null) {
+            if (!(gyumolcsList.SelectedItem is Vegetable fruit)) {
                 MessageBox.Show("Válasszon ki egy meglévő gyümölcsöt az eltávolításhoz", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            command.CommandText = $"delete from `gyumolcs` where `nev` = '{selectedVeg}';";
+            command.CommandText = $"delete from `gyumolcs` where `id` = @id;";
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@id", fruit.Id);
+
             await command.ExecuteNonQueryAsync();
 
             RefreshListItems();
-            MessageBox.Show("Kiválasztott adatok eltávolítva", "Adatok", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            removeVeg.Enabled = false;
+            MessageBox.Show("Kiválasztott adat eltávolítva", "Adat módosítás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            updateFruitButton.Enabled = removeVeg.Enabled = false;
+            ResetProperties();
         }
 
         private void gyumolcsList_SelectedIndexChanged(object sender, EventArgs e) {
-            removeVeg.Enabled = gyumolcsList.SelectedItems.Count != 0;
+            updateFruitButton.Enabled = removeVeg.Enabled = gyumolcsList.SelectedItems.Count != 0;
+
+            if (gyumolcsList.SelectedItem is Vegetable fruit) {
+                idBox.Text = fruit.Id.ToString();
+                nevBox.Text = fruit.Name;
+                egysegAr.Value = fruit.Egysegar;
+                amountBox.Value = fruit.Mennyiseg;
+            }
+        }
+
+        private async void updateFruitButton_Click(object sender, EventArgs e) {
+            if (!(gyumolcsList.SelectedItem is Vegetable fruit)) {
+                MessageBox.Show("Válasszon ki egy meglévő gyümölcsöt a módosításhoz", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            command.CommandText = "update `gyumolcs` set `nev` = @name, `egysegar` = @ar, `mennyiseg` = @amount where `id` = @id;";
+            command.Parameters.Clear();
+            command.Parameters.AddWithValue("@id", fruit.Id);
+            command.Parameters.AddWithValue("@name", nevBox.Text);
+            command.Parameters.AddWithValue("@ar", egysegAr.Value);
+            command.Parameters.AddWithValue("@amount", amountBox.Value);
+
+            await command.ExecuteNonQueryAsync();
+
+            RefreshListItems();
+            MessageBox.Show("Kiválasztott adat frissítve", "Adat módosítás", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            removeVeg.Enabled = updateFruitButton.Enabled = false;
+        }
+
+        private void ResetProperties() {
+            idBox.Text = nevBox.Text = "";
+            egysegAr.Value = egysegAr.Minimum;
+            amountBox.Value = amountBox.Minimum;
         }
     }
 }

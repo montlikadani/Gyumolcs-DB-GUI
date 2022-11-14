@@ -34,6 +34,7 @@
             this.egysegAr = new System.Windows.Forms.NumericUpDown();
             this.newVegButton = new System.Windows.Forms.Button();
             this.removeVeg = new System.Windows.Forms.Button();
+            this.updateFruitButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.amountBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.egysegAr)).BeginInit();
             this.SuspendLayout();
@@ -158,6 +159,7 @@
             // 
             // removeVeg
             // 
+            this.removeVeg.Enabled = false;
             this.removeVeg.Location = new System.Drawing.Point(129, 246);
             this.removeVeg.Name = "removeVeg";
             this.removeVeg.Size = new System.Drawing.Size(214, 43);
@@ -166,11 +168,23 @@
             this.removeVeg.UseVisualStyleBackColor = true;
             this.removeVeg.Click += new System.EventHandler(this.removeVeg_Click);
             // 
+            // updateFruitButton
+            // 
+            this.updateFruitButton.Enabled = false;
+            this.updateFruitButton.Location = new System.Drawing.Point(129, 296);
+            this.updateFruitButton.Name = "updateFruitButton";
+            this.updateFruitButton.Size = new System.Drawing.Size(214, 43);
+            this.updateFruitButton.TabIndex = 13;
+            this.updateFruitButton.Text = "Kiválasztott gyümölcs frissítése";
+            this.updateFruitButton.UseVisualStyleBackColor = true;
+            this.updateFruitButton.Click += new System.EventHandler(this.updateFruitButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(516, 554);
+            this.Controls.Add(this.updateFruitButton);
             this.Controls.Add(this.removeVeg);
             this.Controls.Add(this.newVegButton);
             this.Controls.Add(this.egysegAr);
@@ -183,7 +197,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.gyumolcsList);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -209,6 +223,7 @@
         private System.Windows.Forms.NumericUpDown egysegAr;
         private System.Windows.Forms.Button newVegButton;
         private System.Windows.Forms.Button removeVeg;
+        private System.Windows.Forms.Button updateFruitButton;
     }
 }
 
