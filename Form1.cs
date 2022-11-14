@@ -40,7 +40,7 @@ namespace FormsGyumolcs {
             }
         }
 
-        private void newVegButton_Click(object sender, EventArgs e) {
+        private async void newVegButton_Click(object sender, EventArgs e) {
             string nev = nevBox.Text;
 
             if (nev.Length == 0) {
@@ -55,7 +55,7 @@ namespace FormsGyumolcs {
             command.Parameters.AddWithValue("@egysegar", egysegAr.Value);
             command.Parameters.AddWithValue("@mennyiseg", amountBox.Value);
 
-            command.ExecuteNonQuery();
+            await command.ExecuteNonQueryAsync();
 
             nevBox.Text = "";
             egysegAr.Value = egysegAr.Minimum;
@@ -65,7 +65,7 @@ namespace FormsGyumolcs {
             MessageBox.Show("Adatok rögzítve", "Adatok", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void removeVeg_Click(object sender, EventArgs e) {
+        private async void removeVeg_Click(object sender, EventArgs e) {
             object selectedVeg = gyumolcsList.SelectedItem;
 
             if (selectedVeg is null) {
@@ -74,10 +74,10 @@ namespace FormsGyumolcs {
             }
 
             command.CommandText = $"delete from `gyumolcs` where `nev` = '{selectedVeg}';";
-            command.ExecuteNonQuery();
+            await command.ExecuteNonQueryAsync();
 
             RefreshListItems();
-            MessageBox.Show("Kiválaszott adatok eltávolítva", "Adatok", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Kiválasztott adatok eltávolítva", "Adatok", MessageBoxButtons.OK, MessageBoxIcon.Information);
             removeVeg.Enabled = false;
         }
 
