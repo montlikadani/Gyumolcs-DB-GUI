@@ -99,10 +99,18 @@ namespace FormsGyumolcs {
                 return;
             }
 
+            string nev = nevBox.Text;
+
+            if (nev.Trim().Length == 0) {
+                MessageBox.Show("Nincs megadva gyümölcs név", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                nevBox.Focus();
+                return;
+            }
+
             command.CommandText = "update `gyumolcs` set `nev` = @name, `egysegar` = @ar, `mennyiseg` = @amount where `id` = @id;";
             command.Parameters.Clear();
             command.Parameters.AddWithValue("@id", fruit.Id);
-            command.Parameters.AddWithValue("@name", nevBox.Text);
+            command.Parameters.AddWithValue("@name", nev);
             command.Parameters.AddWithValue("@ar", egysegAr.Value);
             command.Parameters.AddWithValue("@amount", amountBox.Value);
 
